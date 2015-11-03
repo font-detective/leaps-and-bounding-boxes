@@ -13,7 +13,7 @@ std::vector<cv::Rect> detectLetters(cv::Mat img)
     cvtColor(img, img_gray, CV_BGR2GRAY);
     cv::Sobel(img_gray, img_sobel, CV_8U, 1, 0, 3, 1, 0, cv::BORDER_DEFAULT);
     cv::threshold(img_sobel, img_threshold, 0, 255, CV_THRESH_OTSU+CV_THRESH_BINARY);
-    element = getStructuringElement(cv::MORPH_RECT, cv::Size(20, 10) );
+    element = getStructuringElement(cv::MORPH_RECT, cv::Size(17, 3) );
     cv::morphologyEx(img_threshold, img_threshold, CV_MOP_CLOSE, element);
     std::vector< std::vector< cv::Point> > contours;
     cv::findContours(img_threshold, contours, 0, 1); 
@@ -64,14 +64,13 @@ int main(int argc,char** argv)
     }
     
     // Now, store that as another matrix
-    cv::Mat miniMat;
-    img(max).copyTo(subimg);    
+    img(max).copyTo(subimg);
 
     // Overlay bounding boxes
     for(int i=0; i< letterBBoxes.size(); i++)
         cv::rectangle(img, letterBBoxes[i], cv::Scalar(0,255,0), 3, 8, 0);
     
-    // ...and overlay it in red
+    // ...and overlay largest box in red
     cv::rectangle(img, max, cv::Scalar(0, 0, 255), 3, 8, 0);
     
     // Display it!
